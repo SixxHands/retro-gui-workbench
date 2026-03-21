@@ -1,0 +1,36 @@
+# Gradle
+.gradle/
+build/
+repo/
+
+# IntelliJ IDEA
+.idea/
+*.iml
+*.ipr
+*.iws
+out/
+
+# Eclipse
+.project
+.classpath
+.settings/
+.factorypath
+bin/
+
+# Visual Studio Code
+.vscode/
+
+# NeoForge Run Directories
+run/
+runs/
+runClient/
+runServer/
+
+# Logs and crash reports
+*.log
+logs/
+crash-reports/
+
+# OS files
+.DS_Store
+Thumbs.db
