@@ -1,39 +1,47 @@
-# Retro GUI Workbench (NeoForge 1.21.1)
+# Retro GUI Workbench
 
-Client-driven NeoForge 1.21.1 tool mod that exports gameplay GUI textures from vanilla and installed mod jars into a ready-to-edit resource pack folder. It can also write upscaled nearest-neighbor work copies, alignment guide overlays, and a log of screens you opened while playing.
+A small NeoForge 1.21.1 client mod for pulling vanilla and modded GUI textures into a resource pack folder so you can edit them without digging through jars by hand.
 
-It only runs exports on the client; dedicated servers cannot run GUI exports.
+This is a client-side tool. Dedicated servers will load it fine, however exports and screen logging only run on the client because they need the active resource manager.
 
-## What it exports
+## How to use it
 
-Running an export writes `<gameDir>/<outputFolderName>/GuiWorkbenchPack/` with:
+1. Launch Minecraft with the mod installed and join a world.
+2. Press `F8` to turn screen logging on, then open the menus or inventories you want to reskin.
+3. Press `F9` to export only the mods whose screens you opened, or `F10` to export everything allowed by your config.
+4. Open `<gameDir>/retro_gui_workbench_export/GuiWorkbenchPack/` to find the generated resource pack.
 
-- `pack.mcmeta` (pack format 34) and `assets/<namespace>/...` matching the original texture paths
-- `_editable/<namespace>/*__x<scale>.png` nearest-neighbor upscaled copies (when `generateEditableCopies` is on)
-- `_editable/<namespace>/*__guide.png` border, center-line, and title-band overlays (when `generateGuides` is on)
+## What gets exported
+
+Inside `GuiWorkbenchPack/` you get a pack ready to drop straight into `resourcepacks/`, plus two helper folders for art work.
+
+- `pack.mcmeta` and `assets/<namespace>/...` keeping the original texture paths (pack format 34)
+- `_editable/<namespace>/*__x4.png` nearest-neighbor upscaled copies so pixel art stays sharp while editing
+- `_editable/<namespace>/*__guide.png` translucent border, center lines, and rough title band overlays
 - `_manifest/textures.json`, `_manifest/screens_opened.json`, and `_manifest/export_report.txt`
 
-## Keybinds
+## Keybinds and commands
 
-- `F8` - toggle runtime screen logging
-- `F9` - export GUI textures for namespaces seen while logging
-- `F10` - export all configured GUI textures
-
-## Commands
-
-- `/guiwb log start` - start logging opened gameplay screens
-- `/guiwb log stop` - stop logging opened gameplay screens
-- `/guiwb log toggle` - toggle runtime screen logging
-- `/guiwb export all` - export all configured GUI textures
-- `/guiwb export opened` - export only namespaces logged during play
-- `/guiwb scan` - alias for `/guiwb export all`
-- `/guiwb clearlog` - clear the in-memory logged screen list
+| Input | What it does |
+|---|---|
+| `F8` or `/guiwb log toggle` | Toggle runtime screen logging |
+| `/guiwb log start` / `stop` | Turn runtime screen logging on or off |
+| `F9` or `/guiwb export opened` | Export GUI textures only for mods you opened while logging |
+| `F10` or `/guiwb export all` | Export all matching vanilla and modded GUI textures |
+| `/guiwb scan` | Same as `/guiwb export all` |
+| `/guiwb clearlog` | Clear the current session's logged screens |
 
 ## Config
 
-Config file is generated at `config/guiworkbench-common.toml` with sections for `[passes]`, `[export]`, `[output]`, and `[filters]`. When `modWhitelist` is non-empty, jar scanning only exports textures from those namespaces; leave it empty to scan every mod jar.
+Generated on first launch at `config/guiworkbench-common.toml`.
 
-## Build
+- `outputFolderName`: folder created inside your Minecraft directory (default `retro_gui_workbench_export`)
+- `generateEditableCopies`, `editableScale`, `generateGuides`: toggle upscaled copies (default `4x`) and guide overlays
+- `includeVanilla`, `includeMods`: choose whether to pull from Minecraft's resource manager, `mods/*.jar`, or both
+- `modWhitelist`: limits jar scanning to specific namespaces when non-empty (clear the list to scan every mod jar)
+- `exportOnStartup`: run a full export automatically once the client finishes loading
+
+## Building
 
 Requires Java 21.
 
@@ -41,7 +49,7 @@ Requires Java 21.
 ./gradlew test build
 ```
 
-Output jar is written to `build/libs/guiworkbench-1.0.0.jar`.
+The built jar lands in `build/libs/guiworkbench-1.0.0.jar`.
 
 ## License
 
