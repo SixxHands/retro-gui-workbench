@@ -47,30 +47,42 @@ configurations {
 }
 
 repositories {
-    maven { url = "https://maven.minecraftforge.net/releases" }
+    mavenCentral()
+    maven { url = 'https://maven.minecraftforge.net/releases' }
 }
-
 
 dependencies {
     implementation "net.neoforged:neoforge:${neo_version}"
-
+    testImplementation 'org.junit.jupiter:junit-jupiter:5.11.3'
+    testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
 }
 
 tasks.withType(ProcessResources).configureEach {
     var replaceProperties = [
-            minecraft_version       : minecraft_version,
-            minecraft_version_range : minecraft_version_range,
-            neo_version             : neo_version,
-            loader_version_range    : loader_version_range,
-            mod_id                  : mod_id,
-            mod_name                : mod_name,
-            mod_license             : mod_license,
-            mod_version             : mod_version,
+            minecraft_version      : minecraft_version,
+            minecraft_version_range: minecraft_version_range,
+            neo_version            : neo_version,
+            loader_version_range   : loader_version_range,
+            mod_id                 : mod_id,
+            mod_name               : mod_name,
+            mod_license            : mod_license,
+            mod_version            : mod_version,
+            mod_authors            : mod_authors,
+            mod_description        : mod_description,
     ]
     inputs.properties replaceProperties
     filesMatching(['META-INF/neoforge.mods.toml']) {
         expand replaceProperties
     }
+}
+
+tasks.withType(JavaCompile).configureEach {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.addAll(['-Xlint:all', '-Xlint:-processing', '-Werror'])
+}
+
+tasks.named('test', Test).configure {
+    useJUnitPlatform()
 }
 
 publishing {
@@ -82,10 +94,6 @@ publishing {
     repositories {
         maven { url "file://${project.projectDir}/repo" }
     }
-}
-
-tasks.withType(JavaCompile).configureEach {
-    options.encoding = 'UTF-8'
 }
 
 idea {

@@ -1,26 +1,24 @@
 modLoader="javafml"
-loaderVersion="[4,)"
-license="All Rights Reserved"
+loaderVersion="${loader_version_range}"
+license="${mod_license}"
 
 [[mods]]
-modId="retro"
-version="1.0.0"
-displayName="Retro GUI Workbench"
-authors="Retro"
-description='''
-Exports gameplay GUI textures into a resource-pack-ready folder, with optional editable copies, guides, runtime screen logging, commands, and keybinds.
-'''
+modId="${mod_id}"
+version="${mod_version}"
+displayName="${mod_name}"
+authors="${mod_authors}"
+description='''${mod_description}'''
 
-[[dependencies.retro]]
+[[dependencies.${mod_id}]]
 modId="neoforge"
 type="required"
 versionRange="[21.1,)"
 ordering="NONE"
 side="BOTH"
 
-[[dependencies.retro]]
+[[dependencies.${mod_id}]]
 modId="minecraft"
 type="required"
-versionRange="[1.21.1,1.22)"
+versionRange="${minecraft_version_range}"
 ordering="NONE"
 side="BOTH"

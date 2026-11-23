@@ -1,0 +1,6 @@
+{
+  "key.categories.guiworkbench": "Retro GUI Workbench",
+  "key.guiworkbench.toggle_logging": "Toggle GUI Logging",
+  "key.guiworkbench.export_opened": "Export Logged/Open Screens",
+  "key.guiworkbench.export_all": "Export All GUI Assets"
+}

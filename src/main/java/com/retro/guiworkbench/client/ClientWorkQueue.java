@@ -1,50 +1,64 @@
 package com.retro.guiworkbench.client;
 
-public final class ClientWorkQueue {
-    private static volatile boolean requestExportAll;
-    private static volatile boolean requestExportOpened;
-    private static volatile Boolean requestLoggingState;
-    private static volatile boolean requestLoggingToggle;
+import java.util.Optional;
 
-    private ClientWorkQueue() {}
+// Commands run on the server thread, but exporting needs the client resource manager. Drop flags here and let the next client tick pick them up.
+public final class ClientWorkQueue
+{
+    private volatile boolean _exportAllRequested;
+    private volatile boolean _exportOpenedRequested;
+    private volatile Boolean _loggingStateRequested;
+    private volatile boolean _loggingToggleRequested;
 
-    public static void requestExportAll() {
-        requestExportAll = true;
+    ClientWorkQueue()
+    {
     }
 
-    public static void requestExportOpened() {
-        requestExportOpened = true;
+    public void requestExportAll()
+    {
+        _exportAllRequested = true;
     }
 
-    public static void requestLoggingState(boolean enabled) {
-        requestLoggingState = enabled;
+    public void requestExportOpened()
+    {
+        _exportOpenedRequested = true;
     }
 
-    public static void requestLoggingToggle() {
-        requestLoggingToggle = true;
+    public void requestLoggingState(boolean enabled)
+    {
+        _loggingStateRequested = enabled;
     }
 
-    public static boolean consumeExportAll() {
-        boolean out = requestExportAll;
-        requestExportAll = false;
-        return out;
+    public void requestLoggingToggle()
+    {
+        _loggingToggleRequested = true;
     }
 
-    public static boolean consumeExportOpened() {
-        boolean out = requestExportOpened;
-        requestExportOpened = false;
-        return out;
+    public boolean consumeExportAll()
+    {
+        boolean requested = _exportAllRequested;
+        _exportAllRequested = false;
+        return requested;
     }
 
-    public static Boolean consumeRequestedLoggingState() {
-        Boolean out = requestLoggingState;
-        requestLoggingState = null;
-        return out;
+    public boolean consumeExportOpened()
+    {
+        boolean requested = _exportOpenedRequested;
+        _exportOpenedRequested = false;
+        return requested;
     }
 
-    public static boolean consumeLoggingToggle() {
-        boolean out = requestLoggingToggle;
-        requestLoggingToggle = false;
-        return out;
+    public Optional<Boolean> consumeRequestedLoggingState()
+    {
+        Boolean requested = _loggingStateRequested;
+        _loggingStateRequested = null;
+        return Optional.ofNullable(requested);
+    }
+
+    public boolean consumeLoggingToggle()
+    {
+        boolean requested = _loggingToggleRequested;
+        _loggingToggleRequested = false;
+        return requested;
     }
 }
