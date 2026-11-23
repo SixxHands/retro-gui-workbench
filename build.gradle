@@ -76,7 +76,12 @@ tasks.withType(ProcessResources).configureEach {
     }
 }
 
-tasks.withType(JavaCompile).configureEach {
+tasks.named('compileJava', JavaCompile).configure {
+    options.encoding = 'UTF-8'
+    options.compilerArgs.addAll(['-Xlint:all', '-Xlint:-processing', '-Werror'])
+}
+
+tasks.named('compileTestJava', JavaCompile).configure {
     options.encoding = 'UTF-8'
     options.compilerArgs.addAll(['-Xlint:all', '-Xlint:-processing', '-Werror'])
 }
